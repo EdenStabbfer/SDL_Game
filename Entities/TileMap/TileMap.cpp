@@ -47,15 +47,15 @@ void TileMap::LoadMapFromFile(const char *filename)
 }
 
 
-void TileMap::Draw(SDL_Renderer *renderer)
+void TileMap::Draw(SDL_Renderer *renderer, Vector2f offset)
 {
     for (int i{0}; i < mapSize.x; i++)
     {
         for (int j{0}; j < mapSize.y; j++)
         {
             SDL_Rect rect;
-            rect.x = i*tileSize;
-            rect.y = j*tileSize;
+            rect.x = offset.x + i*tileSize;
+            rect.y = offset.y + j*tileSize;
             rect.w = tileSize;
             rect.h = tileSize;
 

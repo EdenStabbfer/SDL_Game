@@ -13,11 +13,15 @@
 class Camera
 {
 public:
-    Camera(const Vector2f& pos, const Vector2f& size);
+    Camera(const Vector2f& pos, SDL_Window* window);
 
     void SetPosition(const Vector2f& pos);
     [[nodiscard]]
     const Vector2f& GetPosition() const;
+
+    void SetSize(const Vector2f& s);
+    [[nodiscard]]
+    const Vector2f& GetSize() const;
 
     void SetNewPosition(const Vector2f& pos);
 
@@ -32,13 +36,19 @@ public:
     [[nodiscard]]
     SDL_Rect GetRect() const;
 
+    [[nodiscard]]
+    Vector2f GetOffset() const;
+
     void Update(const float& dt);
 
 private:
+    SDL_Window* window;
+
     Vector2f currentPosition;   // Позиция центра камеры
     Vector2f nextPosition;      // Позиция следования камеры
-    Vector2f size;              // Размер камеры в пикселях
-    Vector2f halfSize;          // Половина размера камеры
+
+    Vector2f size{0};              // Размер камеры в пикселях
+    Vector2f halfSize{0};          // Половина размера камеры
 
     float moveSpeed {1};        // Коэффициент перехода от старой позиции к новой (от 0 до 1)
     float scale {1};            // Коэффициент масштабирования изображения

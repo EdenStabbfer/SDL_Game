@@ -11,7 +11,7 @@ set(SDL2_PATH C:/CPP_Libs/SDL2-2.26.5/x86_64-w64-mingw32)
 
 find_package(SDL2 REQUIRED)
 
-add_executable(SDL_Game main.cpp App.cpp App.h Math/Math.h Math/Vector2.h Graphics/Graphics.h Utils/TileMap/TileMap.cpp Utils/TileMap/TileMap.h Utils/IDGenerator.cpp Utils/IDGenerator.h Utils/TileMap/Tile.h Utils/TileMap/Tile.cpp)
+add_executable(SDL_Game main.cpp Math/Math.h Math/Vector2.h Graphics/Graphics.h Entities/TileMap/TileMap.cpp Entities/TileMap/TileMap.h Entities/IDGenerator.cpp Entities/IDGenerator.h Entities/TileMap/Tile.h Entities/TileMap/Tile.cpp Entities/Camera.cpp Entities/Camera.h Entities/Player.cpp Entities/Player.h)
 
 include_directories(${SDL2_INCLUDE_DIR})
 target_link_libraries(SDL_Game ${SDL2_LIBRARY})

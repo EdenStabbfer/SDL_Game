@@ -4,12 +4,16 @@
 
 #include "Camera.h"
 
-Camera::Camera(const Vector2f &pos, const Vector2f &size) :
+Camera::Camera(const Vector2f &pos, SDL_Window* window) :
         currentPosition(pos),
         nextPosition(pos),
-        size(size),
-        halfSize(size / 2)
-{}
+        window(window)
+{
+    Vector2i temp{0};
+    SDL_GetWindowSizeInPixels(window, &temp.x, &temp.y);
+    size = {static_cast<double>(temp.x), static_cast<double>(temp.y)};
+    halfSize = size / 2;
+}
 
 void Camera::Update(const float &dt)
 {
@@ -66,4 +70,20 @@ SDL_Rect Camera::GetRect() const
                      static_cast<int>(currentPosition.y),
                      static_cast<int>(size.x),
                      static_cast<int>(size.y)};
+}
+
+Vector2f Camera::GetOffset() const
+{
+    return (halfSize - currentPosition);
+}
+
+void Camera::SetSize(const Vector2f &s)
+{
+    if (s.x > 0 && s.y > 0)
+        size = s;
+}
+
+const Vector2f& Camera::GetSize() const
+{
+    return size;
 }

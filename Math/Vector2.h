@@ -6,6 +6,7 @@
 #define VECTOR2_H
 
 #include <cmath>
+#include <string>
 
 template<class ValueType>
 struct Vector2
@@ -44,7 +45,23 @@ struct Vector2
 
     explicit operator std::string()
     {
-        return "Vector2(" + std::to_string(this->x) + ", " + std::to_string(this->y) + ")";
+        return "Vector2(" + std::to_string((ValueType)this->x) + ", " + std::to_string((ValueType)this->y) + ")";
+    }
+
+    Vector2& normalize()
+    {
+        ValueType l = len();
+        if (l > 0)
+            return *this / l;
+        return {0, 0};
+    }
+
+    Vector2 normalized() const
+    {
+        ValueType l = len();
+        if (l > 0)
+            return *this / l;
+        return {0, 0};
     }
 
     [[nodiscard]]

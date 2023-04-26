@@ -27,7 +27,7 @@ public:
 
     void LoadMapFromFile(const char* filename);
 
-    void Draw(SDL_Renderer* renderer);
+    void Draw(SDL_Renderer* renderer, Vector2f offset);
 
 private:
     Vector2i mapSize;
