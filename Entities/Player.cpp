@@ -3,20 +3,18 @@
 //
 
 #include "Player.h"
+#include <iostream>
 
-Player::Player(const Vector2f &pos, Camera &cam, float speed) :
-        position(pos), camera(cam), speed(speed)
+Player::Player(Camera& cam, const Vector2f& pos, const Vector2i& sz) :
+        position(pos),
+        camera(cam),
+        size(sz)
 {}
-
-void Player::Update(const float &dt)
-{
-
-}
 
 void Player::SetPosition(const Vector2f &pos)
 {
     position = pos;
-    camera.SetNewPosition(pos);
+    camera.SetNextPosition(pos);
 }
 
 const Vector2f &Player::GetPosition() const
@@ -27,7 +25,7 @@ const Vector2f &Player::GetPosition() const
 void Player::Move(const Vector2f &direction, const float& dt)
 {
     position += direction * speed * dt;
-    camera.SetNewPosition(position);
+    camera.SetNextPosition(position);
 }
 
 void Player::SetSpeed(float val)
@@ -39,3 +37,41 @@ float Player::GetSpeed() const
 {
     return speed;
 }
+
+void Player::SetSize(const Vector2u &s)
+{
+        size = s;
+}
+
+const Vector2u &Player::GetSize() const
+{
+    return size;
+}
+
+SDL_Rect Player::GetCollider() const
+{
+    return { static_cast<int>(position.x),
+             static_cast<int>(position.y),
+             static_cast<int>(size.x),
+             static_cast<int>(size.y)
+    };
+}
+
+void Player::Callback(SDL_Event &event, const Uint8 *keyboard)
+{
+    moveDirection = {0, 0};
+    if (keyboard[SDL_SCANCODE_W])
+        moveDirection.y = -1;
+    if (keyboard[SDL_SCANCODE_S])
+        moveDirection.y = 1;
+    if (keyboard[SDL_SCANCODE_D])
+        moveDirection.x = 1;
+    if (keyboard[SDL_SCANCODE_A])
+        moveDirection.x = -1;
+}
+
+void Player::Update(const float &dt)
+{
+    Move(moveDirection, dt);
+}
+

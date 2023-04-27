@@ -11,9 +11,10 @@
 
 #include "Tile.h"
 #include "../../Math/Math.h"
+#include "../../Graphics/Components/IDrawable.h"
 
 
-class TileMap
+class TileMap : public IDrawable
 {
     using Map = std::vector<std::vector<uint32_t>>;
     using TileSet = std::vector<Tile>;
@@ -27,8 +28,7 @@ public:
 
     void LoadMapFromFile(const char* filename);
 
-    void Draw(SDL_Renderer* renderer, Vector2f offset);
-
+    void Render(SDL_Renderer* renderer, Camera* camera) override;
 private:
     Vector2i mapSize;
     uint32_t tileSize;

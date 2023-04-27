@@ -17,6 +17,13 @@ struct Vector2
     Vector2(ValueType _x, ValueType _y) : x(_x), y(_y) {}
     explicit Vector2(ValueType value) : x(value), y(value) {}
 
+    template<class OtherValueType>
+    Vector2(const Vector2<OtherValueType>& other)
+    {
+        this->x = static_cast<ValueType>(other.x);
+        this->y = static_cast<ValueType>(other.y);
+    }
+
     Vector2 operator+(const Vector2& other) const {return {this->x + other.x, this->y + other.y};}
     Vector2 operator+(ValueType value) const {return {this->x + value, this->y + value};}
     Vector2 operator-(const Vector2& other) const {return {this->x - other.x, this->y - other.y};}

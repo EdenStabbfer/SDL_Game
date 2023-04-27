@@ -6,14 +6,14 @@
 #define PLAYER_H
 
 #include "../Math/Math.h"
-#include "Camera.h"
+#include "../Graphics/Camera.h"
+#include "../Graphics/Components/IEventCallable.h"
+#include "../Graphics/Components/IUpdatable.h"
 
-class Player
+class Player : public  IEventCallable, public IUpdatable
 {
 public:
-    Player(const Vector2f& pos, Camera& cam, float speed);
-
-    void Update(const float& dt);
+    Player(Camera& cam, const Vector2f& pos, const Vector2i& sz);
 
     void SetPosition(const Vector2f& pos);
     [[nodiscard]]
@@ -23,11 +23,25 @@ public:
     [[nodiscard]]
     float GetSpeed() const;
 
+    void SetSize(const Vector2u& s);
+    [[nodiscard]]
+    const Vector2u& GetSize() const;
+
+    [[nodiscard]]
+    SDL_Rect GetCollider() const;
+
+    void Callback(SDL_Event& event, const Uint8* keyboard) override;
+
+    void Update(const float& dt) override;
+
     void Move(const Vector2f& , const float& dt);
 
 private:
     Vector2f position;
-    float speed;
+    Vector2u size;
+
+    Vector2f moveDirection{0, 0};
+    float speed {0};
 
     Camera& camera;
 };

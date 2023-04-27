@@ -34,7 +34,6 @@ void TileMap::LoadMapFromFile(const char *filename)
     int j{0};
     while(std::getline(mapFile, line))
     {
-        std::cout << line << std::endl;
         for (int i{0}; i < mapSize.x; i++)
         {
             char c = line[i];
@@ -46,14 +45,14 @@ void TileMap::LoadMapFromFile(const char *filename)
 
 }
 
-
-void TileMap::Draw(SDL_Renderer *renderer, Vector2f offset)
+void TileMap::Render(SDL_Renderer* renderer, Camera* camera)
 {
     for (int i{0}; i < mapSize.x; i++)
     {
         for (int j{0}; j < mapSize.y; j++)
         {
             SDL_Rect rect;
+            Vector2i offset = camera->GetOffset();
             rect.x = offset.x + i*tileSize;
             rect.y = offset.y + j*tileSize;
             rect.w = tileSize;

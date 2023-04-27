@@ -6,7 +6,7 @@
 #define TILE_H
 
 #include "../../Graphics/Graphics.h"
-#include "../IDGenerator.h"
+#include "../../Utils/IDGenerator.h"
 
 
 class Tile
