@@ -10,18 +10,18 @@
 #include <iostream>
 
 #include "Tile.h"
-#include "../../Math/Math.h"
 #include "../../Graphics/Components/IDrawable.h"
+#include "../../Graphics/Components/IMouseControllable.h"
 
 
-class TileMap : public IDrawable
+class TileMap : public IDrawable, public IMouseControllable
 {
     using Map = std::vector<std::vector<uint32_t>>;
     using TileSet = std::vector<Tile>;
 
 public:
     TileMap();
-    TileMap(Vector2i map_size, uint32_t tile_size, const char* filename = "");
+    TileMap(Vector2i map_size, int tile_size, const char* filename = "");
 
     template<class ...ARGs>
     void AddTile(ARGs... args);
@@ -29,9 +29,19 @@ public:
     void LoadMapFromFile(const char* filename);
 
     void Render(SDL_Renderer* renderer, Camera* camera) override;
+
+    void MouseUpdate(const Camera* camera) override;
+
+    [[nodiscard]]
+    const Tile& GetTile(Vector2i pos) const;
+
+    [[nodiscard]]
+    int GetTileSize() const;
+
 private:
     Vector2i mapSize;
-    uint32_t tileSize;
+    Vector2i cursorPosition{0};
+    int tileSize;
 
     Map tileIds;
     TileSet tileSet;

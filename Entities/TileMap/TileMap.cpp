@@ -9,7 +9,7 @@ TileMap::TileMap() :
         tileSize(0)
 {}
 
-TileMap::TileMap(Vector2i map_size, uint32_t tile_size, const char* filename) :
+TileMap::TileMap(Vector2i map_size, int tile_size, const char* filename) :
         mapSize(map_size),
         tileSize(tile_size)
 {
@@ -42,6 +42,7 @@ void TileMap::LoadMapFromFile(const char *filename)
         }
         j++;
     }
+    mapFile.close();
 
 }
 
@@ -52,9 +53,8 @@ void TileMap::Render(SDL_Renderer* renderer, Camera* camera)
         for (int j{0}; j < mapSize.y; j++)
         {
             SDL_Rect rect;
-            Vector2i offset = camera->GetOffset();
-            rect.x = offset.x + i*tileSize;
-            rect.y = offset.y + j*tileSize;
+            rect.x = i*tileSize + camera->GetOffset().x;
+            rect.y = j*tileSize + camera->GetOffset().y;
             rect.w = tileSize;
             rect.h = tileSize;
 
@@ -75,4 +75,35 @@ void TileMap::Render(SDL_Renderer* renderer, Camera* camera)
             }
         }
     }
+
+    SDL_Rect highlightedRect = { cursorPosition.x * tileSize + camera->GetOffset().x,
+                                 cursorPosition.y * tileSize + camera->GetOffset().y ,
+                                 tileSize,
+                                 tileSize
+    };
+    SDL_SetRenderDrawColor(renderer, 255, 195, 15, 255);
+    SDL_RenderDrawRect(renderer, &highlightedRect);
+}
+
+void TileMap::MouseUpdate(const Camera *camera)
+{
+    Vector2i mousePos{0};
+    SDL_GetMouseState(&mousePos.x, &mousePos.y);
+    Vector2f dist = (Vector2f)mousePos/camera->GetScale() + camera->GetPosition() - camera->GetHalfSize();
+    cursorPosition = dist / tileSize;
+    if (dist.x < 0) cursorPosition.x -= 1;
+    if (dist.y < 0) cursorPosition.y -= 1;
+    SDL_SetWindowTitle(camera->GetWindow(), (std::to_string(cursorPosition.x) + " " + std::to_string(cursorPosition.y)).c_str());
+}
+
+const Tile& TileMap::GetTile(Vector2i pos) const
+{
+    if (pos < Vector2i(0) || pos > mapSize)
+        return tileSet[0];
+    return tileSet[tileIds[pos.x][pos.y]];
+}
+
+int TileMap::GetTileSize() const
+{
+    return tileSize;
 }

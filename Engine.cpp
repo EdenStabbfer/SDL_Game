@@ -27,7 +27,7 @@ void Engine::Init(const char *title, Vector2i pos, Vector2u size)
         if (!renderer)
             throw std::runtime_error("Create SDL Window error");
 
-        camera = new Camera({0, 0}, size);
+        camera = new Camera(window, {0, 0}, size);
 
         isRunning = true;
         std::cout << "App \"" << title << "\" initialised..." << std::endl;
@@ -45,11 +45,14 @@ void Engine::Update()
     {
         obj->Update(deltaTime);
     }
+    for (auto& obj : *toMouseUpdate)
+    {
+        obj->MouseUpdate(camera);
+    }
 }
 
 void Engine::Render()
 {
-//    DrawCircle(player.GetPosition() + offset + camera.GetSize() / 2, player.GetSize().x / 2, {255, 0, 0,255}, 30);
     SDL_RenderSetScale(renderer, camera->GetScale(), camera->GetScale());
 
     for (auto& obj : *toRender)
@@ -128,6 +131,11 @@ void Engine::AddCallable(IEventCallable &obj)
     toCallback->push_back(&obj);
 }
 
+void Engine::AddMouseUpdatable(IMouseControllable &obj)
+{
+    toMouseUpdate->push_back(&obj);
+}
+
 Engine::Engine() = default;
 Engine::~Engine() = default;
 
@@ -139,9 +147,11 @@ Camera* Engine::camera = nullptr;
 std::list<IDrawable*>* Engine::toRender = new std::list<IDrawable*>;
 std::list<IUpdatable*>* Engine::toUpdate = new std::list<IUpdatable*>;
 std::list<IEventCallable*>* Engine::toCallback = new std::list<IEventCallable*>;
+std::list<IMouseControllable*>* Engine::toMouseUpdate = new std::list<IMouseControllable*>;
 
 bool Engine::isRunning = false;
 
 float Engine::deltaTime = 1;
 
 enum Engine::WindowMode Engine::WindowMode = WINDOWED;
+

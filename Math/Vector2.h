@@ -49,6 +49,9 @@ struct Vector2
     }
 
     bool operator==(Vector2& other) const { return this->x == other.x && this->y == other.y; }
+    bool operator<(Vector2& other) const { return this->x < other.x && this->y < other.y; }
+    bool operator<(Vector2 other) const { return this->x < other.x && this->y < other.y; }
+    bool operator>(const Vector2& other) const { return this->x > other.x && this->y > other.y; }
 
     explicit operator std::string()
     {

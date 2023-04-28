@@ -18,7 +18,7 @@
 class Camera : public IUpdatable, public IEventCallable
 {
 public:
-    Camera(const Vector2f& pos, const Vector2u& sz);
+    Camera(SDL_Window* wnd, const Vector2f& pos, const Vector2u& sz);
 
     void SetPosition(const Vector2f& pos);
     [[nodiscard]]
@@ -28,6 +28,9 @@ public:
     void SetSize(const Vector2i& s);
     [[nodiscard]]
     Vector2u GetSize() const;
+
+    [[nodiscard]]
+    Vector2u GetHalfSize() const;
 
     void SetNextPosition(const Vector2f& pos);
 
@@ -43,7 +46,15 @@ public:
     SDL_Rect GetRect() const;
 
     [[nodiscard]]
-    Vector2f GetOffset() const;
+    Vector2i GetOffset() const;
+
+    [[nodiscard]]
+    SDL_Window* GetWindow() const;
+
+    [[nodiscard]]
+    int GetWindowWidth() const;
+    [[nodiscard]]
+    int GetWindowHeight() const;
 
     void Upscale();
     void Downscale();
@@ -53,11 +64,14 @@ public:
     void Callback(SDL_Event& event, const Uint8* keyboard) override;
 
 private:
+    SDL_Window* window;
+
     Vector2f currentPosition;   // Позиция центра камеры
     Vector2f nextPosition;      // Позиция следования камеры
 
-    Vector2u size{0};              // Размер камеры в пикселях
-    Vector2u halfSize{0};          // Половина размера камеры
+    Vector2u size {0};              // Размер камеры в пикселях
+    Vector2u halfSize {0};          // Половина размера камеры
+    Vector2f offset {0};
 
     float moveSpeed {1};        // Коэффициент перехода от старой позиции к новой (от 0 до 1)
     float scale {1};            // Коэффициент масштабирования изображения

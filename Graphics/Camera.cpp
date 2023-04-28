@@ -5,7 +5,8 @@
 #include "Camera.h"
 #include <iostream>
 
-Camera::Camera(const Vector2f &pos, const Vector2u& sz) :
+Camera::Camera(SDL_Window* wnd, const Vector2f &pos, const Vector2u& sz) :
+        window(wnd),
         currentPosition(pos),
         nextPosition(pos),
         size(sz),
@@ -15,6 +16,8 @@ Camera::Camera(const Vector2f &pos, const Vector2u& sz) :
 void Camera::Update(const float &dt)
 {
     currentPosition += (nextPosition - currentPosition) * moveSpeed * dt;
+
+    offset = (Vector2f)halfSize / scale - currentPosition ;
 }
 
 void Camera::SetPosition(const Vector2f &pos)
@@ -69,9 +72,9 @@ SDL_Rect Camera::GetRect() const
                      static_cast<int>(size.y)};
 }
 
-Vector2f Camera::GetOffset() const
+Vector2i Camera::GetOffset() const
 {
-    return (Vector2f)halfSize - currentPosition - halfSize;
+    return (Vector2i)offset;
 }
 
 void Camera::SetSize(const Vector2u &s)
@@ -95,6 +98,16 @@ void Camera::SetSize(const Vector2i &s)
 Vector2u Camera::GetSize() const
 {
     return (Vector2f)size / scale;
+}
+
+Vector2u Camera::GetHalfSize() const
+{
+    return (Vector2f)halfSize / scale;
+}
+
+SDL_Window *Camera::GetWindow() const
+{
+    return window;
 }
 
 void Camera::Upscale()
@@ -122,4 +135,18 @@ void Camera::Callback(SDL_Event &event, const Uint8 *keyboard)
                 Downscale();
             }
     }
+}
+
+int Camera::GetWindowWidth() const
+{
+    int w;
+    SDL_GetWindowSizeInPixels(window, &w, nullptr);
+    return w;
+}
+
+int Camera::GetWindowHeight() const
+{
+    int h;
+    SDL_GetWindowSizeInPixels(window, nullptr, &h);
+    return h;
 }

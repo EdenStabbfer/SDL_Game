@@ -11,12 +11,14 @@
 #include "Graphics/Components/IDrawable.h"
 #include "Graphics/Components/IUpdatable.h"
 #include "Graphics/Components/IEventCallable.h"
+#include "Graphics/Components/IMouseControllable.h"
 
 class Engine
 {
     using ObjectsToCallback = std::list<IEventCallable*>;
     using ObjectsToUpdate = std::list<IUpdatable*>;
     using ObjectsToRender = std::list<IDrawable*>;
+    using ObjectsToMouseUpdate = std::list<IMouseControllable*>;
 
 public:
     Engine();
@@ -37,6 +39,7 @@ public:
 
     static void AddDrawable(IDrawable& obj);
     static void AddUpdatable(IUpdatable& obj);
+    static void AddMouseUpdatable(IMouseControllable& obj);
     static void AddCallable(IEventCallable& obj);
 
 private:
@@ -44,9 +47,10 @@ private:
     static SDL_Renderer*        renderer;
     static Camera*              camera;
 
-    static ObjectsToCallback*   toCallback;
-    static ObjectsToRender*     toRender;
-    static ObjectsToUpdate*     toUpdate;
+    static ObjectsToCallback*       toCallback;
+    static ObjectsToRender*         toRender;
+    static ObjectsToUpdate*         toUpdate;
+    static ObjectsToMouseUpdate*    toMouseUpdate;
 
     static bool                 isRunning;
 

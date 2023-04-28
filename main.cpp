@@ -17,23 +17,24 @@ int main(int argc, char* args[])
     Camera* camera = Engine::GetCamera();
     Engine::AddUpdatable(*camera);
     Engine::AddCallable(*camera);
-    camera->SetMoveSpeed(0.02f);
+    camera->SetMoveSpeed(0.03f);
     camera->SetScale(1);
-
-    Player player(*camera, {0, 0}, {0, 0});
-    Engine::AddCallable(player);
-    Engine::AddUpdatable(player);
-    player.SetSize({20, 20});
-    player.SetSpeed(2);
 
     TileMap tileMap = TileMap({100, 100}, 32, "map1.txt");
     Engine::AddDrawable(tileMap);
+    Engine::AddMouseUpdatable(tileMap);
 
-    tileMap.AddTile(Color(0, 0, 0, 0));                 // 0 - воздух
-    tileMap.AddTile(Color(70, 75, 70), false);          // 1 - пол
-    tileMap.AddTile(Color(30, 35, 30, 255), false);     // 2 - стена
-    tileMap.AddTile(Color(65, 175, 70), false);         // 3 - трава
-    tileMap.AddTile(Color(227, 227, 45), false);        // 4 - объект
+    tileMap.AddTile(Color(0, 0, 0, 0), 32);                 // 0 - воздух
+    tileMap.AddTile(Color(70, 75, 70), 32, false);          // 1 - пол
+    tileMap.AddTile(Color(30, 35, 30, 255), 32, false, true);     // 2 - стена
+    tileMap.AddTile(Color(65, 175, 70), 32, false);         // 3 - трава
+    tileMap.AddTile(Color(227, 227, 45), 32, false);        // 4 - объект
+
+    Player player(*camera, {200, 200}, {20, 20});
+    Engine::AddCallable(player);
+    Engine::AddUpdatable(player);
+    Engine::AddDrawable(player);
+    player.SetSpeed(2);
 
     Engine::Run();
 

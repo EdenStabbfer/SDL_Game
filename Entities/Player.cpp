@@ -50,8 +50,8 @@ const Vector2u &Player::GetSize() const
 
 SDL_Rect Player::GetCollider() const
 {
-    return { static_cast<int>(position.x),
-             static_cast<int>(position.y),
+    return { static_cast<int>(position.x - (float)size.x / 2),
+             static_cast<int>(position.y - (float)size.y / 2),
              static_cast<int>(size.x),
              static_cast<int>(size.y)
     };
@@ -75,3 +75,18 @@ void Player::Update(const float &dt)
     Move(moveDirection, dt);
 }
 
+void Player::Render(SDL_Renderer *renderer, Camera *camera)
+{
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+
+    SDL_Rect rect = GetCollider();
+    rect.x += camera->GetOffset().x;
+    rect.y += camera->GetOffset().y;
+    SDL_RenderDrawRect(renderer, &rect);
+    SDL_RenderFillRect(renderer, &rect);
+}
+
+void Player::SetMap(TileMap &tileMap)
+{
+    map = tileMap;
+}

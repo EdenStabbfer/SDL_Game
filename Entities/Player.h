@@ -9,8 +9,11 @@
 #include "../Graphics/Camera.h"
 #include "../Graphics/Components/IEventCallable.h"
 #include "../Graphics/Components/IUpdatable.h"
+#include "../Graphics/Components/IDrawable.h"
 
-class Player : public  IEventCallable, public IUpdatable
+#include "TileMap/TileMap.h"
+
+class Player : public  IEventCallable, public IUpdatable, public IDrawable
 {
 public:
     Player(Camera& cam, const Vector2f& pos, const Vector2i& sz);
@@ -34,11 +37,17 @@ public:
 
     void Update(const float& dt) override;
 
+    void Render(SDL_Renderer* renderer, Camera* camera) override;
+
     void Move(const Vector2f& , const float& dt);
+
+    void SetMap(TileMap& tileMap);
 
 private:
     Vector2f position;
     Vector2u size;
+
+    TileMap map;
 
     Vector2f moveDirection{0, 0};
     float speed {0};
